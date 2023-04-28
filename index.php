@@ -1,6 +1,6 @@
 <?php
 define("IN_WALLET", true);
-require_once "classes/recaptchalib.php";
+require_once "classes/autoload.php";
 include('common.php');
 
 $mysqli = new Mysqli($db_host, $db_user, $db_pass, $db_name);
@@ -308,9 +308,9 @@ if (!empty($_SESSION['user_session'])) {
     $error = array('type' => "none", 'message' => "");
     // verificar a chave secreta
     $response = null;
-    $reCaptcha = new ReCaptcha($secret);
-    $response = $reCaptcha->verifyResponse($_SERVER["REMOTE_ADDR"], $_POST["g-recaptcha-response"]);
-    if ($response != null && $response->success) {
+    $reCaptcha = new \ReCaptcha\ReCaptcha($secret);
+    $response = $reCaptcha->verify($_POST["g-recaptcha-response"], $_SERVER["REMOTE_ADDR"]);
+    if ($response != null && $response->isSuccess()) {
 
         $username;$password;$auth;$captcha;
         if(isset($_POST['username']))
